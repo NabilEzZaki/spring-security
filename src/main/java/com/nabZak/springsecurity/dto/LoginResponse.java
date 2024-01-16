@@ -6,4 +6,12 @@ public class LoginResponse {
     public LoginResponse(String jwtToken) {
         this.jwtToken = jwtToken;
     }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
+    public String getJwtToken() {
+        return jwtToken;
+    }
 }
