@@ -1,5 +1,6 @@
 package com.nabZak.springsecurity.filters;
 
+
 import com.nabZak.springsecurity.services.jwt.CustomerServiceImpl;
 import com.nabZak.springsecurity.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -20,8 +21,8 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final CustomerServiceImpl customerService;
-
     private final JwtUtil jwtUtil;
+
     @Autowired
     public JwtRequestFilter(CustomerServiceImpl customerService, JwtUtil jwtUtil) {
         this.customerService = customerService;
@@ -30,16 +31,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader("Bearer ");
+        String authHeader = request.getHeader("Authorization");
         String token = null;
         String username = null;
 
-        if (authHeader != null && authHeader.startsWith("Bearer")) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             username = jwtUtil.extractUsername(token);
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = customerService.loadUserByUsername(username);
 
             if (jwtUtil.validateToken(token, userDetails)) {
@@ -47,7 +48,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
+
         }
+
         filterChain.doFilter(request, response);
+
     }
 }
