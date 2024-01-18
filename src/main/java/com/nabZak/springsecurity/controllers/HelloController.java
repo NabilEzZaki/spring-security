@@ -1,5 +1,7 @@
 package com.nabZak.springsecurity.controllers;
 
+
+import com.nabZak.springsecurity.dto.HelloResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,8 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class HelloController {
+
     @GetMapping("/hello")
-    public String hello(){
-        return "Hello from authorized API request";
+    public HelloResponse hello(){
+        return new HelloResponse("Hello from Authorized API request.");
     }
 }
